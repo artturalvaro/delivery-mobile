@@ -1,64 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, TextInput, CheckBox } from 'react-native';
+import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { StyleSheet, Pressable, View, Text, Image, CheckBox, TextInput } from 'react-native';
 
-export default function Index() {
+export default function Login() {
+    // Usando o roteador para navegar entre páginas
+    const router = useRouter();
+    
+    // Estado para controlar o estado do checkbox "Lembrar de mim"
+    const [rememberMe, setRememberMe] = useState(false);
 
-    const [checkbox, setCheckbox] = useState(false);
+    // Função para navegar para a página de "Esqueci a Senha"
+    const handleForgotPassword = () => {
+        router.push("/forgot");
+    }
+
+    // Função para navegar para a página de cadastro
+    const handleGoToSignUp = () => {
+        router.push("/register");
+    }
 
     return (
-        <View style={styles.Main}>
-            <Text style={styles.Title}>Log In</Text>
-            <Text style={styles.Description}>Please sign in to your existing account</Text>
-            <View style={styles.Card}>
-                <View style={styles.Group}>
-                    <Text style={styles.GroupText}>Email</Text>
+        <View style={styles.container}>
+            {/* Título da página */}
+            <Text style={styles.title}>Log In</Text>
+            <Text style={styles.description}>We have sent a code to your email</Text>
+            
+            {/* Card contendo o formulário de login */}
+            <View style={styles.card}>
+                {/* Campo de entrada para o Email */}
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Email</Text>
                     <TextInput
-                        style={styles.Input}
+                        style={styles.input}
                         placeholder="example@gmail.com"
+                        keyboardType="email-address"
                     />
                 </View>
-                <View style={styles.Group}>
-                    <Text style={styles.GroupText}>Password</Text>
+                
+                {/* Campo de entrada para a Senha */}
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Password</Text>
                     <TextInput
-                        style={styles.Input}
+                        style={styles.input}
                         placeholder="12345678"
+                        secureTextEntry
                     />
                 </View>
-                <View style={styles.Section}>
-                    <View style={styles.Checkbox}>
+                
+                {/* Seção para checkbox e link para recuperação de senha */}
+                <View style={styles.optionsSection}>
+                    <View style={styles.checkboxContainer}>
                         <CheckBox
-                            value={checkbox}
-                            onValueChange={setCheckbox}
+                            value={rememberMe}
+                            onValueChange={setRememberMe} // Altera o estado do checkbox
                         />
-                        <Text style={styles.CheckBoxText}>Remember me</Text>
+                        <Text style={styles.checkboxLabel}>Remember me</Text>
                     </View>
-                    <Text style={styles.Forgot}>Forgot Password</Text>
+                    
+                    {/* Link para a página de "Esqueci a Senha" */}
+                    <Pressable onPress={handleForgotPassword}>
+                        <Text style={styles.forgotPassword}>Forgot Password</Text>
+                    </Pressable>
                 </View>
-                <Text style={styles.Button}>Log In</Text>
-                <Text style={styles.Text}>Don’t have an account? <Text style={styles.Sign}>Sign Up</Text></Text>
-                <Text style={styles.Or}>Or</Text>
-                <View style={styles.SocialGroup}>
-                    <View style={styles.Apple}>
-                        <Image style={styles.IconApp} source={require('@/assets/images/Apple.svg')}></Image>
+                
+                {/* Botão para fazer o login */}
+                <Text style={styles.loginButton}>Log In</Text>
+
+                {/* Link para a página de cadastro */}
+                <Text style={styles.signupText}>
+                    Don’t have an account? 
+                    <Pressable onPress={handleGoToSignUp}>
+                        <Text style={styles.signupLink}> Sign Up</Text>
+                    </Pressable>
+                </Text>
+
+                {/* Separador visual com a palavra "Or" */}
+                <Text style={styles.orText}>Or</Text>
+
+                {/* Grupo de botões sociais */}
+                <View style={styles.socialLoginGroup}>
+                    {/* Ícones de login social (Apple, Google, Twitter) */}
+                    <View style={styles.socialIconContainer}>
+                        <Image style={styles.socialIcon} source={require('@/assets/images/Apple.svg')} />
                     </View>
-                    <View style={styles.Google}>
-                        <Image style={styles.IconApp} source={require('@/assets/images/google.png')}></Image>
+                    <View style={styles.socialIconContainer}>
+                        <Image style={styles.socialIcon} source={require('@/assets/images/google.png')} />
                     </View>
-                    <View style={styles.X}>
-                        <Image style={styles.IconApp} source={require('@/assets/images/twitter.png')}></Image>
+                    <View style={styles.socialIconContainer}>
+                        <Image style={styles.socialIcon} source={require('@/assets/images/twitter.png')} />
                     </View>
                 </View>
             </View>
         </View>
-    )
+    );
 }
 
+// Estilos para os componentes da página
 const styles = StyleSheet.create({
-    Main: {
+    // Contêiner principal com fundo escuro
+    container: {
         backgroundColor: "#121223",
         height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    Title: {
+
+    // Título da página de login
+    title: {
         textAlign: "center",
         marginTop: 80,
         marginBottom: 16,
@@ -66,65 +114,85 @@ const styles = StyleSheet.create({
         fontFamily: "Sen-Bold",
         fontSize: 30,
     },
-    Description: {
+
+    // Descrição abaixo do título
+    description: {
         color: "#FFFFFF",
         textAlign: "center",
         fontFamily: "Sen-Regular",
         fontSize: 16,
         marginBottom: 48,
+        opacity: 0.7,
     },
-    Card: {
+
+    // Estilo para o card de login
+    card: {
         backgroundColor: "#FFFFFF",
-        height: '100%',
         borderRadius: 24,
+        width: "100%",
+        height: 720,
+        paddingVertical: 32,
         alignItems: "center",
-        paddingTop: 32,
     },
-    Group: {
+
+    // Grupo de campos de entrada (email, senha)
+    inputGroup: {
         width: 327,
-        height: 86,
         marginBottom: 16,
     },
-    GroupText: {
+
+    // Rótulo do campo de entrada
+    inputLabel: {
         color: "#32343E",
         fontFamily: "Sen-Regular",
         fontSize: 13,
         textTransform: "uppercase",
     },
-    Input: {
+
+    // Estilo dos campos de entrada
+    input: {
         marginTop: 16,
         backgroundColor: "#F0F5FA",
         borderRadius: 10,
         width: 327,
         height: 67,
         padding: 16,
-        
         color: "#32343E",
         fontFamily: "Sen-Regular",
         fontSize: 14,
         textTransform: "lowercase",
     },
-    Section: {
+
+    // Seção de opções como "Remember me" e "Forgot Password"
+    optionsSection: {
         width: 327,
-        marginTop: 16,
         flexDirection: "row",
         justifyContent: "space-between",
+        marginTop: 16,
     },
-    Checkbox: {
+
+    // Estilo do container do checkbox
+    checkboxContainer: {
         flexDirection: "row",
-        gap: 7,
+        alignItems: "center",
     },
-    CheckBoxText: {
+
+    // Estilo do texto do checkbox
+    checkboxLabel: {
         color: "#7E8A97",
         fontFamily: "Sen-Regular",
         fontSize: 13,
     },
-    Forgot: {
+
+    // Estilo do link "Forgot Password"
+    forgotPassword: {
         color: "#FF7622",
         fontFamily: "Sen-Regular",
         fontSize: 14,
     },
-    Button: {
+
+    // Estilo do botão de login
+    loginButton: {
         marginTop: 48,
         backgroundColor: "#FF7622",
         borderRadius: 12,
@@ -132,64 +200,59 @@ const styles = StyleSheet.create({
         height: 62,
         padding: 22,
         textAlign: 'center',
-
         color: "#FFFFFF",
         fontFamily: "Sen-Bold",
         fontSize: 16,
         textTransform: "uppercase",
     },
-    Text: {
+
+    // Estilo do texto para link de "Sign Up"
+    signupText: {
         marginTop: 16,
         color: "#646982",
         fontFamily: "Sen-Regular",
         fontSize: 16,
     },
-    Sign: {
+
+    // Estilo do link de "Sign Up"
+    signupLink: {
         color: "#FF7622",
         fontFamily: "Sen-Bold",
         fontSize: 14,
         textTransform: "uppercase",
     },
-    Or: {
+
+    // Estilo para o separador "Or"
+    orText: {
         marginTop: 32,
         color: "#646982",
         fontFamily: "Sen-Regular",
         fontSize: 16,
     },
-    SocialGroup: {
+
+    // Grupo para os ícones sociais
+    socialLoginGroup: {
         flexDirection: 'row',
         justifyContent: "space-between",
         width: 327,
         alignItems: "center",
         marginTop: 16,
+        marginBottom: 80,
     },
-    Apple: {
+
+    // Estilo para o contêiner de ícones sociais
+    socialIconContainer: {
         backgroundColor: "#1B1F2F",
-        borderRadius: 510,
+        borderRadius: 50,
         width: 62,
         height: 62,
         justifyContent: "center",
         alignItems: "center",
     },
-    Google: {
-        backgroundColor: "#1a1a1a",
-        borderRadius: 510,
-        width: 62,
-        height: 62,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    X: {
-        backgroundColor: "#F0F5FA",
-        borderRadius: 510,
-        width: 62,
-        height: 62,
-        justifyContent: "center",
-        alignItems: "center",
-        boxShadow: "0px 0px 10px #b5b8bb",
-    },
-    IconApp: {
+
+    // Estilo para os ícones de redes sociais
+    socialIcon: {
         width: 23,
         height: 25,
-    }
+    },
 });

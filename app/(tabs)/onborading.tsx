@@ -1,118 +1,166 @@
-import React, { useState, useRef } from 'react'
-import { Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Boarding() {
+export default function Onboarding() {
     const router = useRouter();
 
-    const [ellipse, setEllipse] = useState(0);
-    const title = ['All your favorites' , 'Order from choosen chef', 'Free delivery offers'];
-    const description = ['Get all your loved foods in one once place, you just place the orer we do the rest', 'Get all your loved foods in one once place, you just place the orer we do the rest', 'Get all your loved foods in one once place, you just place the orer we do the rest'];
+    // Estado para controlar qual slide está ativo
+    const [currentSlide, setCurrentSlide] = useState(0);
 
-    const nextStep = () => {
-        if (ellipse < 2) {
-            setEllipse(ellipse + 1);
+    // Títulos e descrições dos slides
+    const titles = [
+        'All your favorites', 
+        'Order from chosen chef', 
+        'Free delivery offers'
+    ];
+    
+    const descriptions = [
+        'Get all your loved foods in one place. You just place the order, and we do the rest.',
+        'Order from the chefs you love the most, and enjoy unique meals.',
+        'Enjoy exclusive offers for free delivery on your favorite dishes.'
+    ];
+
+    // Função para passar para o próximo slide
+    const nextSlide = () => {
+        if (currentSlide < 2) {
+            setCurrentSlide(currentSlide + 1);
         }
     };
 
+    // Função para finalizar o onboarding e redirecionar o usuário
     const finishOnboarding = async () => {
         try {
-            await AsyncStorage.setItem('OnBoarding', 'true');
-            router.push("/(tabs)");
+            // Armazenando a conclusão do onboarding
+            await AsyncStorage.setItem('OnboardingCompleted', 'true');
+            router.push("/login");  // Redirecionando para login
         } catch (error) {
-            console.error('Erro ao marcar como visitado:', error);
+            console.error('Error while saving onboarding status:', error);
         }
     };
 
     return (
-        <View style={styles.Main}>
-        <View style={styles.Image}></View>
-            <Text style={styles.Title}>{title[ellipse]}</Text>
-            <Text style={styles.Description}>{description[ellipse]}</Text>
-            <View style={styles.Slide}>
+        <View style={styles.container}>
+            {/* Área para a imagem (placeholder para imagem real) */}
+            <View style={styles.image}></View>
+
+            {/* Título do slide atual */}
+            <Text style={styles.title}>{titles[currentSlide]}</Text>
+
+            {/* Descrição do slide atual */}
+            <Text style={styles.description}>{descriptions[currentSlide]}</Text>
+
+            {/* Indicador de progresso (círculos de navegação) */}
+            <View style={styles.slideIndicators}>
                 {[0, 1, 2].map((index) => (
                     <View
-                    key={index}
-                    style={[
-                        styles.Ellipse,
-                        ellipse === index && styles.EllipseActive,  // Troca de cor para o círculo ativo
-                    ]}
+                        key={index}
+                        style={[
+                            styles.indicator, 
+                            currentSlide === index && styles.activeIndicator
+                        ]}
                     />
                 ))}
             </View>
-            <Text style={styles.Button} onPress={ellipse < 2 ? nextStep : finishOnboarding}>{ellipse < 2 ? 'Next' : 'Get Started'}</Text>
-            {ellipse < 2 && (
-                <TouchableOpacity
-                    onPress={nextStep}
-                >
-                <Text style={styles.Skip} onPress={finishOnboarding}>Skip</Text>
-                </TouchableOpacity>
+
+            {/* Botão para avançar ou finalizar o onboarding */}
+            <Pressable 
+                style={styles.button} 
+                onPress={currentSlide < 2 ? nextSlide : finishOnboarding}
+            >
+                <Text style={styles.buttonText}>
+                    {currentSlide < 2 ? 'Next' : 'Get Started'}
+                </Text>
+            </Pressable>
+
+            {/* Opção de pular o onboarding */}
+            {currentSlide < 2 && (
+                <Pressable onPress={finishOnboarding}>
+                    <Text style={styles.skipText}>Skip</Text>
+                </Pressable>
             )}
         </View>
-     )
+    );
 }
 
 const styles = StyleSheet.create({
-    Main: {
+    container: {
         flex: 1,
         justifyContent: "center",
-        alignContent: "center",
         alignItems: "center",
-        gap: 16,
+        paddingHorizontal: 24,
     },
-    Image: {
+
+    // Placeholder da imagem, pode ser substituída por uma imagem real
+    image: {
         backgroundColor: "#98A8B8",
         borderRadius: 12,
         width: 240,
         height: 292,
     },
-    Title: {
+
+    // Estilo para o título
+    title: {
         marginTop: 32,
         fontFamily: 'Sen-ExtraBold',
         fontSize: 24,
+        textAlign: 'center',
     },
-    Description: {
+
+    // Estilo para a descrição
+    description: {
         width: 324,
         color: "#646982",
         fontSize: 16,
         textAlign: 'center',
+        marginTop: 16,
     },
-    Slide: {
+
+    // Estilos para os indicadores de progresso (círculos)
+    slideIndicators: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
         marginTop: 16,
         marginBottom: 32,
     },
-    Ellipse: {
+
+    indicator: {
         backgroundColor: "#FFE1CE",
         width: 10,
         height: 10,
         borderRadius: 12,
     },
-    EllipseActive: {
+
+    activeIndicator: {
         backgroundColor: "#FF7622",
-        width: 10,
-        height: 10,
-        borderRadius: 12,
     },
-    Button: {
+
+    // Estilos do botão de ação
+    button: {
         backgroundColor: "#FF7622",
         width: 327,
         height: 62,
         borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-        padding: 23,
+    // Texto dentro do botão
+    buttonText: {
         color: "#FFFFFF",
         fontFamily: "Sen-Bold",
         textTransform: 'uppercase',
         fontSize: 16,
         textAlign: 'center',
     },
-    Skip: {
+
+    // Estilo do texto para pular o onboarding
+    skipText: {
         color: "#646982",
         fontFamily: 'Sen-Regular',
         fontSize: 18,
+        marginTop: 8,
     }
 });

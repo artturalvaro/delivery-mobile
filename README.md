@@ -1,50 +1,35 @@
-# Welcome to your Expo app 👋
+# Projeto de Estudo - DFOOD
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este é um projeto de estudos que tem como objetivo desenvolver uma aplicação mobile. A aplicação foi desenvolvida utilizando o framework Expo, React Native e outras bibliotecas complementares.
 
-## Get started
+## Como rodar o projeto
 
-1. Install dependencies
+### Pré-requisitos:
 
-   ```bash
+- Node.js (recomendado a versão 14 ou superior)
+- Install dependencies
    npm install
-   ```
+- Start the app
+   npx expo start
 
-2. Start the app
+## Versão 0.1
 
-   ```bash
-    npx expo start
-   ```
+### O que foi feito:
 
-In the output, you'll find options to open the app in a
+- **Configuração inicial**: Estrutura básica do projeto utilizando `expo-cli`.
+- **Primeira tela de Splash**: Tela inicial de carregamento com animação simples e logo da aplicação.
+- **Tela de Onboarding**: Tela de introdução para guiar o usuário durante o processo inicial do app.
+- **Navegação básica**: Implementação do sistema de navegação entre telas utilizando `expo-router`.
+- **Verificação de permissão de localização**: Criação de uma tela para verificar se o usuário concedeu permissão de acesso à sua localização.
+- **Armazenamento local com AsyncStorage**: Utilização do `AsyncStorage` para gerenciar o estado da tela de onboarding (se o usuário já concluiu a introdução ou não).
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Versão 0.2
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### O que foi feito:
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Gestão de permissões de localização**: A tela de permissão de localização agora solicita e gerencia as permissões de localização do dispositivo. 
+    - Se a permissão for concedida, o usuário é redirecionado para a página principal.
+    - Se a permissão for negada, um alerta é mostrado para o usuário.
+- **Refatoração do código**: Código otimizado com melhorias na legibilidade e estrutura.
+- **Tela de navegação após permissão**: Implementação da navegação para telas específicas baseadas no status da permissão de localização (permitida ou negada).
+- **Aprimoramento na usabilidade**: Ajustes no layout das telas para uma melhor experiência do usuário.
