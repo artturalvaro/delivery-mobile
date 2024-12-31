@@ -12,16 +12,16 @@ Este é um projeto de estudos que tem como objetivo desenvolver uma aplicação 
 - Start the app
    npx expo start
 
-## Versão 0.1
+## Versão 0.3
 
 ### O que foi feito:
 
-- **Configuração inicial**: Estrutura básica do projeto utilizando `expo-cli`.
-- **Primeira tela de Splash**: Tela inicial de carregamento com animação simples e logo da aplicação.
-- **Tela de Onboarding**: Tela de introdução para guiar o usuário durante o processo inicial do app.
-- **Navegação básica**: Implementação do sistema de navegação entre telas utilizando `expo-router`.
-- **Verificação de permissão de localização**: Criação de uma tela para verificar se o usuário concedeu permissão de acesso à sua localização.
-- **Armazenamento local com AsyncStorage**: Utilização do `AsyncStorage` para gerenciar o estado da tela de onboarding (se o usuário já concluiu a introdução ou não).
+- **Arquitetura de Páginas**: Refatoração na estrutura de pastas para melhorar a organização do projeto.
+   - **Pasta auth**: Todas as páginas que exigem autenticação foram movidas para a pasta auth.
+   - **Pasta public**: Páginas públicas, como login e registro, foram movidas para a pasta public.
+   - **Pagina verification removida**: A página de verificação foi combinada com a de registro, criando uma experiência mais fluida para o usuário.
+- **Otimização de Páginas**: Algumas páginas foram otimizadas para melhorar o desempenho e a legibilidade do código, garantindo uma navegação mais rápida e eficiente.
+- **Criação de Paginação na Home**: Foi implementada a funcionalidade de paginação na tela principal (Home), permitindo que os usuários visualizem os restaurantes ou categorias em várias páginas, melhorando a navegação em listas grandes.
 
 ## Versão 0.2
 
@@ -33,3 +33,14 @@ Este é um projeto de estudos que tem como objetivo desenvolver uma aplicação 
 - **Refatoração do código**: Código otimizado com melhorias na legibilidade e estrutura.
 - **Tela de navegação após permissão**: Implementação da navegação para telas específicas baseadas no status da permissão de localização (permitida ou negada).
 - **Aprimoramento na usabilidade**: Ajustes no layout das telas para uma melhor experiência do usuário.
+
+## Versão 0.1
+
+### O que foi feito:
+
+- **Configuração inicial**: Estrutura básica do projeto utilizando `expo-cli`.
+- **Primeira tela de Splash**: Tela inicial de carregamento com animação simples e logo da aplicação.
+- **Tela de Onboarding**: Tela de introdução para guiar o usuário durante o processo inicial do app.
+- **Navegação básica**: Implementação do sistema de navegação entre telas utilizando `expo-router`.
+- **Verificação de permissão de localização**: Criação de uma tela para verificar se o usuário concedeu permissão de acesso à sua localização.
+- **Armazenamento local com AsyncStorage**: Utilização do `AsyncStorage` para gerenciar o estado da tela de onboarding (se o usuário já concluiu a introdução ou não).

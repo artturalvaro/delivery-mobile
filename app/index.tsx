@@ -5,13 +5,6 @@ import { useRouter } from 'expo-router';
 export default function SplashScreen() {
     const router = useRouter();
     const { width, height } = useWindowDimensions(); // Obtém as dimensões da janela para ajuste responsivo
-    
-    useEffect(() => {
-        // Redireciona para a tela principal após 2 segundos
-        setTimeout(() => {
-            router.push("/(tabs)"); // Altere o caminho para onde deseja redirecionar
-        }, 2000); // Tempo de espera de 2 segundos
-    }, []);
 
     return (
         <View style={{
