@@ -21,7 +21,7 @@ const InitialLayout = () => {
     if(isSignedIn && !inAuthGroup) {
       router.replace("/home");
     } else if(!isSignedIn) {
-      router.replace("/login");
+      router.replace("/onboarding");
     }
 
   }, [isSignedIn]);
@@ -39,6 +39,7 @@ export default function RootLayout() {
     'Sen-Regular': require('../assets/fonts/Sen-Regular.ttf'),
     'Sen-Bold': require('../assets/fonts/Sen-Bold.ttf'),
     'Sen-ExtraBold': require('../assets/fonts/Sen-ExtraBold.ttf'),
+    'Poppins-Medium': require('../assets/fonts/Poppins-Medium.ttf'),
   });
 
   useEffect(() => {

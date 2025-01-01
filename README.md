@@ -12,6 +12,21 @@ Este é um projeto de estudos que tem como objetivo desenvolver uma aplicação 
 - Start the app
    npx expo start
 
+## Versão 0.4
+
+### O que foi feito:
+
+- **Melhorias de Otimização**:
+   - Otimizações gerais para melhorar a performance do aplicativo e reduzir a complexidade do código.
+   - Redução do tempo de carregamento de páginas e melhor uso de estados para atualizações dinâmicas.
+- **Novas Páginas Adicionadas**:
+   - **Search**: Página dedicada para busca de restaurantes, categorias ou pratos específicos.
+   - **Category**: Implementada uma página para navegação e seleção de categorias.
+   - **Products**: Página para exibição detalhada dos produtos de uma categoria ou restaurante.
+- **Aprimoramentos de Navegação**:
+   - Melhor integração entre as páginas recém-adicionadas e as já existentes.
+   - Fluxo de navegação ajustado para facilitar a experiência do usuário.
+
 ## Versão 0.3
 
 ### O que foi feito:
