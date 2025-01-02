@@ -1,20 +1,49 @@
 import React from 'react';
 import { useRouter,  } from "expo-router";
 import { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text, Image, Pressable, ImageSourcePropType } from "react-native";
+import { StyleSheet, Modal, ScrollView, View, Text, Image, Pressable, ImageSourcePropType } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Svg, { Path } from "react-native-svg";
 
 export default function index() {
     const router = useRouter();
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible2, setModalVisible2] = useState(false);
     const [size, setSize] = useState(0);
-    const [qntd, setQntd] = useState(1);
+    const [qntd, setQntd] = useState(0);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
     const [priceQntd, setPriceQntd] = useState(price);
+    const [modalError, setModalError] = useState('');
 
+    const addToCart = async () => {
+        try {
+            if(size == 0) {
+                setModalError('Select the size of the snack');
+                setModalVisible2(true);
+            } else if(qntd == 0) {
+                setModalError('Select how many you want to buy');
+                setModalVisible2(true);
+            }
+            else {
+                const product = { title, price: price, size: size, qntd: qntd || 1 };
+                const storedCart = await AsyncStorage.getItem('cart');
+                const cartItems = storedCart ? JSON.parse(storedCart) : [];
+                cartItems.push(product);
+                await AsyncStorage.setItem('cart', JSON.stringify(cartItems));
+                setModalVisible(true);
+                setPrice(0);
+                setPriceQntd(0);
+                setQntd(0);
+                setSize(0);
+            }
+        } catch (error) {
+            console.error('Erro ao adicionar produto ao carrinho:', error);
+        }
+    };
 
     { /* Uid de Teste */ }
 
@@ -61,8 +90,63 @@ export default function index() {
 
     return (
         <ScrollView>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.Dialog}>
+                    <View style={styles.DialogContent}>
+                        <View style={styles.DialogImage}>
+                            <View style={styles.DialogImage2}>
+                                <Svg
+                                    viewBox="0 0 32 32"
+                                    style={{ fill: "#48DB71" }}
+                                >
+                                    <Path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z" />
+                                </Svg>
+                            </View>
+                        </View>
+                        <Text style={styles.DialogTitle}>Sucess!</Text>
+                        <Text style={styles.DialogDescription}>Item added to cart</Text>
+                        <Pressable style={styles.DialogButton} onPress={() => { setModalVisible(false); }}>
+                            <Text style={styles.DialogButtonText}>Close</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible2}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible2);
+                }}
+            >
+                <View style={styles.Dialog}>
+                    <View style={styles.DialogContent}>
+                        <View style={styles.DialogImageErro}>
+                            <View style={styles.DialogImage2}>
+                                <Svg
+                                    viewBox="-3.5 0 19 19"
+                                    style={{ fill: "#ec2626" }}
+                                >
+                                    <Path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z" />
+                                </Svg>
+                            </View>
+                        </View>
+                        <Text style={styles.DialogTitle}>Erro!</Text>
+                        <Text style={styles.DialogDescription}>{modalError}</Text>
+                        <Pressable style={styles.DialogButton} onPress={() => { setModalVisible2(false); }}>
+                            <Text style={styles.DialogButtonText}>Close</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.Content}>
-
                 <View style={styles.Header}>
                     <Pressable style={styles.Menu} onPress={() => { router.push('/home') }}>
                         <Image source={require('@/assets/images/arrow-left.svg')} />
@@ -99,18 +183,18 @@ export default function index() {
                     <View style={styles.Size}>
                         <Text style={styles.SizeTitle}>Size:</Text>
                         
-                        <Pressable style={size == 1 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
-                            setSize(1);
+                        <Pressable style={size == 10 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
+                            setSize(10);
                         }}>
                             <Text style={styles.SizeBottomTitle}>10”</Text>
                         </Pressable>
-                        <Pressable style={size == 2 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
-                            setSize(2);
+                        <Pressable style={size == 16 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
+                            setSize(16);
                         }}>
                             <Text style={styles.SizeBottomTitle}>16”</Text>
                         </Pressable>
-                        <Pressable style={size == 3 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
-                            setSize(3);
+                        <Pressable style={size == 20 ? styles.SizeBottomActive : styles.SizeBottom} onPress={ () => {
+                            setSize(20);
                         }}>
                             <Text style={styles.SizeBottomTitle}>20”</Text>
                         </Pressable>
@@ -162,9 +246,9 @@ export default function index() {
                     </Pressable>
                 </View>
                 </View>
-                <View style={styles.Buy}>
+                <Pressable style={styles.Buy} onPress={addToCart}>
                     <Text style={styles.BuyText}>Add to cart</Text>
-                </View>
+                </Pressable>
             </View>
         </ScrollView>
     )
@@ -401,5 +485,68 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontFamily: 'Sen-Bold',
         fontSize: 16,
+    },
+
+    // Dialog
+    Dialog: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'rgba(0, 0, 0, 0.5)',
+    },
+    DialogContent: {
+        backgroundColor: '#FFFFFF',
+        padding: 32,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        width: 250,
+        height: 230,
+    },
+    DialogImage: {
+        width: 40,
+        height: 40,
+        margin: 0,
+        borderRadius: 50,
+        boxShadow: '0 0 0 2px #48DB71',
+        marginBottom: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    DialogImageErro: {
+        width: 40,
+        height: 40,
+        margin: 0,
+        borderRadius: 50,
+        boxShadow: '0 0 0 2px #ec2626',
+        marginBottom: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    DialogImage2: {
+        width: 25,
+        height: 25,
+    },
+    DialogTitle: {
+        fontFamily: 'Sen-Bold',
+        fontSize: 24,
+    },
+    DialogDescription: {
+        fontFamily: 'Sen-Regular',
+        fontSize: 14,
+    },
+    DialogButton: {
+        marginTop: 16,
+        backgroundColor: '#000',
+        boxShadow: '0 0 0 2px #000 inset',
+        borderRadius: 10,
+        height: 40,
+        width: 150,
+    },
+    DialogButtonText: {
+        fontFamily: 'Sen-Regular',
+        fontSize: 20,
+        margin: 'auto',
+        color: '#FFFFFF',
     }
 });

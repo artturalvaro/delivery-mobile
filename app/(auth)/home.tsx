@@ -2,6 +2,9 @@ import { useAuth, useUser } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, Text, TextInput, View, Image, ImageSourcePropType, Pressable } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Components
 import { RestaurantItem } from '@/components/restaurant'
 
 export default function Index() {
@@ -38,12 +41,41 @@ export default function Index() {
     </View>
   );
 
+  // Obter Carrinho
+  const [itemCount, setItemCount] = useState(0);
+
+  interface CartItem {
+    title: string;
+    price: number;
+    qntd: number;
+    size: string;
+  }
+  
+  const getCartItemCount = async () => {
+      try {
+          const storedCart = await AsyncStorage.getItem('cart');
+          if (storedCart) {
+              const cartItems: CartItem[] = JSON.parse(storedCart);
+              return cartItems.reduce((total: number, item: CartItem) => total + item.qntd, 0);
+          }
+          return 0;
+      } catch (error) {
+          console.error('Erro ao obter a quantidade de itens no carrinho:', error);
+          return 0;
+      }
+  };
+
   useEffect(() => {
     if(search === '') {
       setIsSearch(false);
     } else if (search !== '') {
       setIsSearch(true);
     }
+    const fetchCartItemCount = async () => {
+      const count = await getCartItemCount();
+      setItemCount(count);
+    };
+    fetchCartItemCount();
   });
 
   function handleGoCategory() {
@@ -76,12 +108,14 @@ export default function Index() {
               </View>
             </View>
           )}
-          <View style={styles.Cart}>
-            <View style={styles.CartNumber}>
-              <Text style={styles.CartNumberText}>2</Text>
-            </View>
+          <Pressable style={styles.Cart} onPress={() => { router.replace('/cart'); }}>
+            {itemCount >= 1 && (
+              <View style={styles.CartNumber}>
+                <Text style={styles.CartNumberText}>{itemCount}</Text>
+              </View>
+            )}
             <Image source={require('@/assets/images/Cart.svg')}/>
-          </View>
+          </Pressable>
         </View>
         
         <View style={styles.Main}>

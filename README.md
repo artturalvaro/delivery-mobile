@@ -12,6 +12,33 @@ Este é um projeto de estudos que tem como objetivo desenvolver uma aplicação 
 - Start the app
    npx expo start
 
+## Versão 0.5
+
+### O que foi feito:
+
+- **Otimizações**:
+   - **Dialog**:
+      - Implementações de melhorias no layout para torná-lo mais responsivo, garantindo que o conteúdo se ajuste melhor a diferentes tamanhos de tela.
+      - Ajustes no comportamento dos diálogos (modais) para melhor interação do usuário, incluindo a exibição e ocultação mais fluida.
+   - **Novas Páginas Adicionadas**:
+      - **Payment**:
+         - Implementação de uma página dedicada para efetuar os pagamentos após a confirmação do carrinho.
+         - Integração com a API de pagamento para realizar a transação e fornecer feedback ao usuário.
+         - Inclusão de validação e exibição de informações de pagamento, como número do cartão de crédito, data de expiração, código de segurança e tipo de cartão (Visa, MasterCard, etc.).
+         - Funcionalidade para adicionar novos cartões de crédito e salvá-los localmente utilizando a AsyncStorage.
+   - **Melhorias de Funcionalidade**:
+      - **Adição de Cartões**:
+         - Foi implementada uma funcionalidade que permite aos usuários salvar novos cartões de crédito.
+         - O cartão adicionado é validado com a formatação correta para o número do cartão e a data de expiração.
+         - A data de expiração foi formatada de forma a garantir que o formato de entrada siga o padrão MM/YYYY.
+         - A verificação do tipo de cartão (Visa, MasterCard, etc.) foi incorporada utilizando a API Binlist para buscar as informações do BIN (primeiros 6 dígitos do número do cartão).
+      - **Validação de Entrada**:
+         - A entrada de número do cartão de crédito agora está limitada a 16 caracteres, com formatação dinâmica enquanto o usuário digita.
+         - A entrada da data de expiração foi ajustada para permitir apenas dois dígitos para o mês (de 01 a 12), seguidos de uma barra e quatro dígitos para o ano (MM/YYYY).
+- **Correções de Erros**:
+   - **Erros de Tipagem**: Corrigido erro de tipagem relacionado a tipos de dados do TypeScript, garantindo que todos os campos de entrada e funções de manipulação de dados estivessem corretamente tipados.
+   - **Erros de Lógica**: Corrigido erro de manipulação de tipo ao adicionar cartões à lista e ao salvar dados de forma segura.
+
 ## Versão 0.4
 
 ### O que foi feito:
